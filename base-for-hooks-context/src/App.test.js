@@ -27,6 +27,12 @@ describe('getSecretWordCalls', () => {
 		expect(mockGetSecretWord).toHaveBeenCalled()
 	})
 	test('getSecretWord is not called on app update', () => {
-		setup()
+		const wrapper = setup()
+		//Clear the call after the setup
+		mockGetSecretWord.mockClear()
+		//Enzymes wrapper.update() method does not trigger useEffect
+		//setProps as an alternative
+		wrapper.setProps()
+		expect(mockGetSecretWord).not.toHaveBeenCalled()
 	})
 })
