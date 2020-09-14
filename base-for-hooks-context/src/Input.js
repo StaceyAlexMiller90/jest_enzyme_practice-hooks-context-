@@ -11,6 +11,9 @@ const Input = ({ secretWord }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
+		if (currentGuess === secretWord) {
+			setSuccess(true)
+		}
 		setCurrentGuess('')
 		//Update guessedwords context
 		//Check against secret word and
