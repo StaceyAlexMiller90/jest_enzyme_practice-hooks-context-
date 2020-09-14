@@ -1,36 +1,24 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { findByTestAttr, checkProps } from '../test/testUtils'
+import successContext from './contexts/successContext'
 import languageContext from './contexts/languageContext'
 
 import Input from './Input'
 
-const defaultProps = {
-	secretWord: '',
-}
-
-const setup = ({ secretWord, language }) => {
+const setup = ({ secretWord, language, success }) => {
 	secretWord = secretWord || 'party'
 	language = language || 'en'
+	success = success || false
+
 	return mount(
 		<languageContext.Provider value={language}>
-			<Input secretWord={secretWord} />
+			<successContext.SuccessProvider value={[success, jest.fn()]}>
+				<Input secretWord={secretWord} />
+			</successContext.SuccessProvider>
 		</languageContext.Provider>
 	)
 }
-
-describe('language picker', () => {
-	test('correctly renders submit button in english', () => {
-		const wrapper = setup({ language: 'en' })
-		const submitButton = findByTestAttr(wrapper, 'submit-button')
-		expect(submitButton.text()).toBe('Submit')
-	})
-	test('correctly renders submit button in emoji', () => {
-		const wrapper = setup({ language: 'emoji' })
-		const submitButton = findByTestAttr(wrapper, 'submit-button')
-		expect(submitButton.text()).toBe('🚀')
-	})
-})
 
 test('Input renders without error', () => {
 	const wrapper = setup({})
@@ -39,7 +27,7 @@ test('Input renders without error', () => {
 })
 
 test('does not throw warning with expected props', () => {
-	checkProps(Input, defaultProps)
+	checkProps(Input, { secretWord: 'party' })
 })
 
 describe('state controlled input field', () => {
@@ -65,4 +53,22 @@ describe('state controlled input field', () => {
 		submitButton.simulate('submit', mockEvent)
 		expect(mockSetCurrentGuess).toHaveBeenCalledWith('')
 	})
+})
+
+describe('language picker', () => {
+	test('correctly renders submit button in english', () => {
+		const wrapper = setup({ language: 'en' })
+		const submitButton = findByTestAttr(wrapper, 'submit-button')
+		expect(submitButton.text()).toBe('Submit')
+	})
+	test('correctly renders submit button in emoji', () => {
+		const wrapper = setup({ language: 'emoji' })
+		const submitButton = findByTestAttr(wrapper, 'submit-button')
+		expect(submitButton.text()).toBe('🚀')
+	})
+})
+
+test('input component does not render when success is true', () => {
+	const wrapper = setup({ secretWord: 'party', success: true })
+	expect(wrapper.isEmptyRender()).toBe(true)
 })

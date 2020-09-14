@@ -1,18 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import successContext from './contexts/successContext'
 import languageContext from './contexts/languageContext'
 import stringsModule from './helpers/strings'
 
 const Input = ({ secretWord }) => {
 	const [currentGuess, setCurrentGuess] = React.useState('')
 	const language = React.useContext(languageContext)
+	const [success, setSuccess] = successContext.useSuccess()
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		setCurrentGuess('')
 		//Update guessedwords context
-		//Check against secret work and
+		//Check against secret word and
 		//Update success context
+	}
+
+	if (success) {
+		return null
 	}
 
 	return (
