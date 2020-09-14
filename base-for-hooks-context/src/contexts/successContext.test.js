@@ -22,5 +22,5 @@ test('useSuccess does not throw an error if it is inside of SuccessProvider', ()
 				<FunctionalComponent />
 			</successContext.SuccessProvider>
 		)
-	}).not.toThrow('useSuccess must be used within a SuccessProvider')
+	}).not.toThrow()
 })
