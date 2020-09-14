@@ -3,6 +3,7 @@ import { mount } from 'enzyme'
 import { findByTestAttr, checkProps } from '../test/testUtils'
 import successContext from './contexts/successContext'
 import languageContext from './contexts/languageContext'
+import guessedWordsContext from './contexts/guessedWordsContext'
 
 import Input from './Input'
 
@@ -13,9 +14,11 @@ const setup = ({ secretWord, language, success }) => {
 
 	return mount(
 		<languageContext.Provider value={language}>
-			<successContext.SuccessProvider value={[success, jest.fn()]}>
-				<Input secretWord={secretWord} />
-			</successContext.SuccessProvider>
+			<guessedWordsContext.GuessedWordsProvider>
+				<successContext.SuccessProvider value={[success, jest.fn()]}>
+					<Input secretWord={secretWord} />
+				</successContext.SuccessProvider>
+			</guessedWordsContext.GuessedWordsProvider>
 		</languageContext.Provider>
 	)
 }
@@ -50,7 +53,7 @@ describe('state controlled input field', () => {
 	test('state clears when submit button is clicked', () => {
 		const submitButton = findByTestAttr(wrapper, 'submit-button')
 		const mockEvent = { preventDefault() {} }
-		submitButton.simulate('submit', mockEvent)
+		submitButton.simulate('click', mockEvent)
 		expect(mockSetCurrentGuess).toHaveBeenCalledWith('')
 	})
 })

@@ -55,6 +55,7 @@ const App = () => {
 	return (
 		<div className="container" data-test="component-app">
 			<h1>Jotto</h1>
+			<p>the secret word is {state.secretWord}</p>
 			<languageContext.Provider value={state.language}>
 				<LanguagePicker setLanguage={setLanguage} />
 				<guessedWordsContext.GuessedWordsProvider>
@@ -62,6 +63,7 @@ const App = () => {
 					<successContext.SuccessProvider>
 						<Congrats />
 						<Input secretWord={state.secretWord} />
+						<GuessedWords />
 					</successContext.SuccessProvider>
 					{/* <GuessedWords /> */}
 				</guessedWordsContext.GuessedWordsProvider>

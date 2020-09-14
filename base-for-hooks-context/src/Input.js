@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { getLetterMatchCount } from './helpers'
+import guessedWordsContext from './contexts/guessedWordsContext'
 import successContext from './contexts/successContext'
 import languageContext from './contexts/languageContext'
 import stringsModule from './helpers/strings'
@@ -8,16 +10,20 @@ const Input = ({ secretWord }) => {
 	const [currentGuess, setCurrentGuess] = React.useState('')
 	const language = React.useContext(languageContext)
 	const [success, setSuccess] = successContext.useSuccess()
+	const [guessedWords, setGuessedWords] = guessedWordsContext.useGuessedWords()
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		if (currentGuess === secretWord) {
 			setSuccess(true)
 		}
+		const letterMatchCount = getLetterMatchCount(currentGuess, secretWord)
+		const newGuessedWords = [
+			...guessedWords,
+			{ guessedWord: currentGuess, letterMatchCount },
+		]
+		setGuessedWords(newGuessedWords)
 		setCurrentGuess('')
-		//Update guessedwords context
-		//Check against secret word and
-		//Update success context
 	}
 
 	if (success) {
@@ -40,8 +46,7 @@ const Input = ({ secretWord }) => {
 				></input>
 				<button
 					data-test="submit-button"
-					onSubmit={handleSubmit}
-					type="submit"
+					onClick={handleSubmit}
 					className="btn btn-primary mb-2"
 				>
 					{stringsModule.getStringByLanguage(language, 'submit')}
